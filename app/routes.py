@@ -28,3 +28,42 @@ def create_task():
         },
         201,
     )
+
+
+def validate_task(task_id):
+    try:
+        task_id = int(task_id)
+    except:
+        abort(make_response({"message": f"Task {task_id} invalid"}, 400))
+
+    task = Task.query.get(task_id)
+
+    if not task:
+        abort(make_response({"message": f"Task {task_id} not found"}, 404))
+
+    return task
+
+
+@tasks_bp.route("", methods=["GET"])
+def read_all_tasks():
+    title_query = request.args.get("title")
+    if title_query:
+        tasks = Task.query.filter_by(title=title_query)
+    else:
+        tasks = Task.query.all()
+
+    tasks_response = []
+    for task in tasks:
+        task = task.to_dict()
+        if not task["completed_at"]:
+            task["is_complete"] = False
+            del task["completed_at"]
+        tasks_response.append(task)
+
+    return jsonify(tasks_response)
+
+
+@tasks_bp.route("/<task_id>", methods=["GET"])
+def read_one_book(task_id):
+    task = validate_task(task_id)
+    return task.to_dict()
