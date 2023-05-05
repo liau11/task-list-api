@@ -6,3 +6,13 @@ class Task(db.Model):
     title = db.Column(db.String)
     description = db.Column(db.String)
     completed_at = db.Column(db.DateTime)
+
+    def to_dict(self):
+        task_as_dict = {
+            "task_id": self.task_id,
+            "title": self.title,
+            "description": self.description,
+            "completed_at": self.completed_at,
+        }
+
+        return task_as_dict
