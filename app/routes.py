@@ -52,18 +52,24 @@ def read_all_tasks():
     else:
         tasks = Task.query.all()
 
-    tasks_response = []
-    for task in tasks:
-        task = task.to_dict()
-        if not task["completed_at"]:
-            task["is_complete"] = False
-            del task["completed_at"]
-        tasks_response.append(task)
-
-    return jsonify(tasks_response)
+    return jsonify([task.to_dict() for task in tasks])
 
 
 @tasks_bp.route("/<task_id>", methods=["GET"])
 def read_one_book(task_id):
     task = validate_task(task_id)
+    return task.to_dict()
+
+
+@tasks_bp.route("/<task_id>", methods=["PUT"])
+def update_one_task(task_id):
+    task = validate_task(task_id)
+
+    request_body = request.get_json()
+
+    task.title = request_body["title"]
+    task.description = request_body["description"]
+
+    db.session.commit()
+
     return task.to_dict()
