@@ -45,7 +45,7 @@ def read_all_tasks():
 
 
 @tasks_bp.route("/<task_id>", methods=["GET"])
-def read_one_book(task_id):
+def read_one_task(task_id):
     task = validate_task(task_id)
     return task.to_dict()
 
@@ -56,8 +56,13 @@ def update_one_task(task_id):
 
     request_body = request.get_json()
 
-    task.title = request_body["title"]
-    task.description = request_body["description"]
+    for column, data in request_body.items():
+        if column == "title":
+            task.title = request_body["title"]
+        elif column == "description":
+            task.description = request_body["description"]
+        elif column == "is_complete":
+            task.is_complete == request_body["is_complete"]
 
     db.session.commit()
 
