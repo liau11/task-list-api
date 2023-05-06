@@ -16,3 +16,8 @@ class Task(db.Model):
         }
 
         return task_as_dict
+
+    @classmethod
+    def from_dict(cls, task_data):
+        new_task = Task(title=task_data["title"], description=task_data["description"])
+        return new_task
