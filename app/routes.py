@@ -8,11 +8,10 @@ tasks_bp = Blueprint("tasks", __name__, url_prefix="/tasks")
 @tasks_bp.route("", methods=["POST"])
 def create_task():
     request_body = request.get_json()
-    new_task = Task(
-        title=request_body["title"],
-        description=request_body["description"],
-        completed_at=request_body["completed_at"],
-    )
+    try:
+        new_task = Task.from_dict(request_body)
+    except KeyError:
+        return {"details": "Invalid data"}, 400
 
     db.session.add(new_task)
     db.session.commit()
@@ -73,3 +72,13 @@ def update_one_task(task_id):
     db.session.commit()
 
     return task.to_dict()
+
+
+@tasks_bp.route("/<task_id>", methods=["DELETE"])
+def delete_task(task_id):
+    task = validate_task(task_id)
+
+    db.session.delete(task)
+    db.session.commit()
+
+    return make_response(jsonify(f"Task {task.id} {task.title} successfully deleted"))
