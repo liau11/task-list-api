@@ -16,17 +16,7 @@ def create_task():
     db.session.add(new_task)
     db.session.commit()
 
-    return make_response(
-        {
-            "task": {
-                "id": new_task.task_id,
-                "title": new_task.title,
-                "description": new_task.description,
-                "is_complete": False,
-            }
-        },
-        201,
-    )
+    return make_response({"task": new_task.to_dict()}, 201)
 
 
 def validate_task(task_id):
