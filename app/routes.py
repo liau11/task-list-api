@@ -8,6 +8,7 @@ tasks_bp = Blueprint("tasks", __name__, url_prefix="/tasks")
 @tasks_bp.route("", methods=["POST"])
 def create_task():
     request_body = request.get_json()
+
     try:
         new_task = Task.from_dict(request_body)
     except KeyError:
@@ -36,6 +37,7 @@ def validate_task(task_id):
 @tasks_bp.route("", methods=["GET"])
 def read_all_tasks():
     sort_method = request.args.get("sort")
+
     if sort_method == "desc":
         tasks = Task.query.order_by(Task.title.desc()).all()
     elif sort_method == "asc":
