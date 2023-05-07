@@ -80,4 +80,6 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
 
-    return make_response(f'Task {task.task_id} "{task.title}" successfully deleted')
+    return make_response(
+        {"details": 'Task {task.task_id} "{task.title}" successfully deleted'}, 200
+    )
