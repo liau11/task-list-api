@@ -9,6 +9,7 @@ tasks_bp = Blueprint("tasks", __name__, url_prefix="/tasks")
 @tasks_bp.route("", methods=["POST"])
 def create_task():
     request_body = request.get_json()
+
     try:
         new_task = Task.from_dict(request_body)
     except KeyError:
@@ -37,6 +38,7 @@ def validate_task(task_id):
 @tasks_bp.route("", methods=["GET"])
 def read_all_tasks():
     sort_method = request.args.get("sort")
+
     if sort_method == "desc":
         tasks = Task.query.order_by(Task.title.desc()).all()
     elif sort_method == "asc":
@@ -50,7 +52,7 @@ def read_all_tasks():
 @tasks_bp.route("/<task_id>", methods=["GET"])
 def read_one_task(task_id):
     task = validate_task(task_id)
-    return task.to_dict()
+    return make_response({"task": task.to_dict()}, 200)
 
 
 @tasks_bp.route("/<task_id>", methods=["PUT"])
@@ -69,7 +71,7 @@ def update_one_task(task_id):
 
     db.session.commit()
 
-    return task.to_dict()
+    return make_response({"task": task.to_dict()}, 200)
 
 
 @tasks_bp.route("/<task_id>", methods=["DELETE"])
@@ -79,7 +81,10 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
 
-    return make_response(f'Task {task.task_id} "{task.title}" successfully deleted')
+    return make_response(
+        {"details": f'Task {task_id} "{task.title}" successfully deleted'},
+        200,
+    )
 
 
 @tasks_bp.route("/<task_id>/<mark_completeness>", methods=["PATCH"])
@@ -87,9 +92,10 @@ def mark_complete(task_id, mark_completeness):
     task = validate_task(task_id)
 
     if mark_completeness == "mark_complete":
-        task.is_complete = datetime.now()
+        task.completed_at = datetime.now()
     elif mark_completeness == "mark_incomplete":
-        task.is_complete = None
+        task.completed_at = None
+        task.is_complete = False
 
     db.session.commit()
 
