@@ -12,7 +12,7 @@ class Task(db.Model):
             "task_id": self.task_id,
             "title": self.title,
             "description": self.description,
-            "completed_at": self.completed_at,
+            "is_complete": bool(self.is_complete),
         }
 
         return task_as_dict
