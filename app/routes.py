@@ -70,7 +70,7 @@ def update_one_task(task_id):
 
     db.session.commit()
 
-    return task.to_dict()
+    return make_response({"task": task.to_dict()}, 200)
 
 
 @tasks_bp.route("/<task_id>", methods=["DELETE"])
