@@ -102,7 +102,6 @@ def mark_complete(task_id, mark_completeness):
 
     db.session.commit()
 
-    print(task.title)
     response = requests.post(
         "https://slack.com/api/chat.postMessage",
         headers={"Authorization": "Bearer " + os.environ.get("SLACKBOT_TOKEN")},
