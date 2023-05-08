@@ -95,7 +95,6 @@ def mark_complete(task_id, mark_completeness):
         task.completed_at = datetime.now()
     elif mark_completeness == "mark_incomplete":
         task.completed_at = None
-        task.is_complete = False
 
     db.session.commit()
 
