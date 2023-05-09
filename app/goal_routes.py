@@ -44,6 +44,19 @@ def read_one_goal(goal_id):
     return make_response({"goal": goal.to_dict()}, 200)
 
 
+@goals_bp.route("/<goal_id>", methods=["PUT"])
+def update_one_goal(goal_id):
+    goal = get_valid_item_by_id(Goal, goal_id)
+
+    request_body = request.get_json()
+
+    goal.title = request_body["title"]
+
+    db.session.commit()
+
+    return make_response({"goal": goal.to_dict()}, 200)
+
+
 @goals_bp.route("/<goal_id>", methods=["DELETE"])
 def delete_goal(goal_id):
     goal = get_valid_item_by_id(Goal, goal_id)
