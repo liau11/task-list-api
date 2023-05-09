@@ -97,18 +97,17 @@ def mark_complete(task_id, mark_completeness):
 
     if mark_completeness == "mark_complete":
         task.completed_at = datetime.now()
+        response = requests.post(
+            "https://slack.com/api/chat.postMessage",
+            headers={"Authorization": "Bearer " + os.environ.get("SLACKBOT_TOKEN")},
+            json={
+                "channel": "task-notifications",
+                "text": f"Someone just completed the task {task.title}",
+            },
+        )
     elif mark_completeness == "mark_incomplete":
         task.completed_at = None
 
     db.session.commit()
-
-    response = requests.post(
-        "https://slack.com/api/chat.postMessage",
-        headers={"Authorization": "Bearer " + os.environ.get("SLACKBOT_TOKEN")},
-        json={
-            "channel": "task-notifications",
-            "text": f"Someone just completed the task {task.title}",
-        },
-    )
 
     return make_response({"task": task.to_dict()}, 200)
