@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, abort, make_response, request
 import requests
 from app.models.goal import Goal
 from app import db
+from app.validation_helper import get_valid_item_by_id
 
 
 goals_bp = Blueprint("goals", __name__, url_prefix="/goals")
@@ -34,3 +35,10 @@ def read_all_goals():
         goals = Goal.query.all()
 
     return jsonify([goal.to_dict() for goal in goals])
+
+
+@goals_bp.route("/<goal_id>", methods=["GET"])
+def read_one_goal(goal_id):
+    goal = get_valid_item_by_id(Goal, goal_id)
+
+    return make_response({"goal": goal.to_dict()}, 200)
