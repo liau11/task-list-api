@@ -36,7 +36,10 @@ def client(app):
 @pytest.fixture
 def one_task(app):
     new_task = Task(
-        title="Go on my daily walk 🏞", description="Notice something new every day", completed_at=None)
+        title="Go on my daily walk 🏞",
+        description="Notice something new every day",
+        completed_at=None,
+    )
     db.session.add(new_task)
     db.session.commit()
 
@@ -47,14 +50,15 @@ def one_task(app):
 # them in the database
 @pytest.fixture
 def three_tasks(app):
-    db.session.add_all([
-        Task(
-            title="Water the garden 🌷", description="", completed_at=None),
-        Task(
-            title="Answer forgotten email 📧", description="", completed_at=None),
-        Task(
-            title="Pay my outstanding tickets 😭", description="", completed_at=None)
-    ])
+    db.session.add_all(
+        [
+            Task(title="Water the garden 🌷", description="", completed_at=None),
+            Task(title="Answer forgotten email 📧", description="", completed_at=None),
+            Task(
+                title="Pay my outstanding tickets 😭", description="", completed_at=None
+            ),
+        ]
+    )
     db.session.commit()
 
 
@@ -65,7 +69,10 @@ def three_tasks(app):
 @pytest.fixture
 def completed_task(app):
     new_task = Task(
-        title="Go on my daily walk 🏞", description="Notice something new every day", completed_at=datetime.utcnow())
+        title="Go on my daily walk 🏞",
+        description="Notice something new every day",
+        completed_at=datetime.utcnow(),
+    )
     db.session.add(new_task)
     db.session.commit()
 
