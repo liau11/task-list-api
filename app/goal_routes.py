@@ -71,15 +71,15 @@ def delete_goal(goal_id):
     )
 
 
-@goals_bp.route("/<goal_id>/tasks", methods=["POST"])
-def add_task_to_one_goal(goal_id):
-    goal = get_valid_item_by_id(Goal, goal_id)
+@goals_bp.route("/<id_goal>/tasks", methods=["POST"])
+def add_task_to_one_goal(id_goal):
+    goal = get_valid_item_by_id(Goal, id_goal)
 
     request_body = request.get_json()
 
     for task_id in request_body["task_ids"]:
         valid_task = get_valid_item_by_id(Task, task_id)
-        valid_task.goal_id = goal_id
+        valid_task.goal_id = id_goal
         db.session.add(valid_task)
 
     db.session.commit()
