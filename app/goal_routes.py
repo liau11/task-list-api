@@ -85,3 +85,10 @@ def add_task_to_one_goal(id_goal):
     db.session.commit()
 
     return {"id": goal.goal_id, "task_ids": request_body["task_ids"]}, 200
+
+
+@goals_bp.route("/<id_goal>/tasks", methods=["GET"])
+def get_tasks_of_one_goal(id_goal):
+    goal = get_valid_item_by_id(Goal, id_goal)
+
+    return make_response(goal.to_dict_with_tasks(), 200)
