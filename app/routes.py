@@ -43,6 +43,8 @@ def read_all_tasks():
 def read_one_task(task_id):
     task = get_valid_item_by_id(Task, task_id)
 
+    if task.goal_id:
+        return make_response({"task": task.to_dict_with_goal_id()}, 200)
     return make_response({"task": task.to_dict()}, 200)
 
 
