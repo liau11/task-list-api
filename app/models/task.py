@@ -19,6 +19,16 @@ class Task(db.Model):
 
         return task_as_dict
 
+    def to_dict_with_goal_id(self):
+        task_as_dict = {
+            "id": self.task_id,
+            "title": self.title,
+            "description": self.description,
+            "is_complete": bool(self.completed_at),
+            "goal_id": self.goal_id,
+        }
+        return task_as_dict
+
     @classmethod
     def from_dict(cls, task_data):
         new_task = Task(
