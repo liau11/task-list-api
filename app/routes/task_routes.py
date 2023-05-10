@@ -4,7 +4,7 @@ from app.models.task import Task
 from app import db
 from datetime import datetime
 import os
-from app.validation_helper import get_valid_item_by_id
+from app.routes.validation_helper import get_valid_item_by_id
 
 
 tasks_bp = Blueprint("tasks", __name__, url_prefix="/tasks")

@@ -3,7 +3,7 @@ import requests
 from app.models.goal import Goal
 from app.models.task import Task
 from app import db
-from app.validation_helper import get_valid_item_by_id
+from app.routes.validation_helper import get_valid_item_by_id
 
 
 goals_bp = Blueprint("goals", __name__, url_prefix="/goals")
