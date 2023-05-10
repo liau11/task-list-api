@@ -15,21 +15,14 @@ class Goal(db.Model):
         return goal_as_dict
 
     def to_dict_with_tasks(self):
-        goal_as_dict = {
-            "id": self.goal_id,
-            "title": self.title,
-            "tasks": [task.to_dict_with_goal_id() for task in self.tasks],
-        }
+        goal_as_dict = self.to_dict()
+        goal_as_dict["tasks"] = [task.to_dict_with_goal_id() for task in self.tasks]
 
         return goal_as_dict
 
     def to_dict_with_tasks_and_goal(self):
-        goal_as_dict = {
-            "id": self.goal_id,
-            "title": self.title,
-            "goal_id": self.goal_id,
-            "tasks": [task.to_dict_with_goal_id() for task in self.tasks],
-        }
+        goal_as_dict = self.to_dict_with_tasks()
+        goal_as_dict["goal_id"] = self.goal_id
 
         return goal_as_dict
 
