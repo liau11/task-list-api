@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, abort, make_response, request
 import requests
 from app.models.goal import Goal
+from app.models.task import Task
 from app import db
 from app.validation_helper import get_valid_item_by_id
 
@@ -68,3 +69,19 @@ def delete_goal(goal_id):
         {"details": f'Goal {goal_id} "{goal.title}" successfully deleted'},
         200,
     )
+
+
+@goals_bp.route("/<goal_id>/tasks", methods=["POST"])
+def add_task_to_one_goal(goal_id):
+    goal = get_valid_item_by_id(Goal, goal_id)
+
+    request_body = request.get_json()
+
+    for task_id in request_body["task_ids"]:
+        valid_task = get_valid_item_by_id(Task, task_id)
+        valid_task.goal_id = goal_id
+        db.session.add(valid_task)
+
+    db.session.commit()
+
+    return {"id": goal.goal_id, "task_ids": request_body["task_ids"]}, 200
