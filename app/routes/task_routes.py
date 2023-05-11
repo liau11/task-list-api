@@ -88,7 +88,7 @@ def mark_complete(task_id, mark_completeness):
         task.completed_at = datetime.now()
         response = requests.post(
             "https://slack.com/api/chat.postMessage",
-            headers={"Authorization": "Bearer " + os.environ.get("SLACKBOT_TOKEN")},
+            headers={"Authorization": f"Bearer {os.environ.get('SLACK_BOT_TOKEN')}"},
             json={
                 "channel": "task-notifications",
                 "text": f"Someone just completed the task {task.title}",
