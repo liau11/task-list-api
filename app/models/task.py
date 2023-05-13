@@ -17,11 +17,8 @@ class Task(db.Model):
             "is_complete": bool(self.completed_at),
         }
 
-        return task_as_dict
-
-    def to_dict_with_goal_id(self):
-        task_as_dict = self.to_dict()
-        task_as_dict["goal_id"] = self.goal_id
+        if self.goal_id:
+            task_as_dict["goal_id"] = self.goal_id
 
         return task_as_dict
 
